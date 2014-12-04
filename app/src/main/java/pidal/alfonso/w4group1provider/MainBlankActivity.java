@@ -24,10 +24,10 @@ public class MainBlankActivity extends Activity {
 
         DatabaseHelper dbHelper = new DatabaseHelper(this);
 
-        Company testCompany = new Company("Test Company 1", "http://google.com");
-        Office testOffice = new Office(1, "Test Office 1", OfficeType.REGULAR, testCompany);
-        Gallery testGallery = new Gallery("http://www.youtube.com", testCompany);
-        Language testLanguage = new Language("English", "This is a test.", testCompany);
+        Company testCompany = new Company(1, "Test Company 1", "http://google.com");
+        Office testOffice = new Office(1, 1, "Test Office 1", OfficeType.REGULAR, testCompany);
+        Gallery testGallery = new Gallery(1, "http://www.youtube.com", testCompany);
+        Language testLanguage = new Language(1, "English", "This is a test.", testCompany);
 
         dbHelper.addCompany(testCompany);
         dbHelper.addOffice(testOffice);
@@ -97,7 +97,6 @@ public class MainBlankActivity extends Activity {
         //dbHelper.deleteCompany(returnCompany);
         //Log.d("Deleting company", "deleted");
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
