@@ -1,18 +1,14 @@
 package pidal.alfonso.w4group1provider;
 
 import android.app.Activity;
+import android.content.ContentValues;
+import android.content.CursorLoader;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import java.util.List;
-
-import pidal.alfonso.w4group1provider.Models.Company;
-import pidal.alfonso.w4group1provider.Models.Gallery;
-import pidal.alfonso.w4group1provider.Models.Language;
-import pidal.alfonso.w4group1provider.Models.Office;
-import pidal.alfonso.w4group1provider.Models.OfficeType;
+import android.widget.Toast;
 
 
 public class MainBlankActivity extends Activity {
@@ -22,80 +18,203 @@ public class MainBlankActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_blank);
 
-        DatabaseHelper dbHelper = new DatabaseHelper(this);
 
-        Company testCompany = new Company(1, "Test Company 1", "http://google.com");
-        Office testOffice = new Office(1, 1, "Test Office 1", OfficeType.REGULAR, testCompany);
-        Gallery testGallery = new Gallery(1, "http://www.youtube.com", testCompany);
-        Language testLanguage = new Language(1, "English", "This is a test.", testCompany);
+        this.addCompany();
+        this.getCompany("1");
+        this.updateCompany("1");
+        this.getCompany("1");
 
-        dbHelper.addCompany(testCompany);
-        dbHelper.addOffice(testOffice);
-        dbHelper.addLanguage(testLanguage);
-        dbHelper.addGallery(testGallery);
+        this.getAllCompanies();
 
-        Company returnCompany = dbHelper.getCompany(1);
-        Log.d("Reading company", returnCompany.toString());
+        this.addOffice();
+        this.getOffice("1");
+        this.updateOffice("1");
+        this.getOffice("1");
 
-        List<Company> companyList = dbHelper.getAllCompanies();
+        this.getAllOffices();
 
-        for (Company aCompanyList : companyList) {
-            Log.d("Reading all companies", aCompanyList.toString());
+        this.deleteOffice("1");
+        this.deleteCompany("1");
+
+    }
+
+    private void addCompany() {
+        ContentValues values = new ContentValues();
+        values.put(CompanyProvider.KEY_COMPANY_ID, 1);
+        values.put(CompanyProvider.KEY_NAME, "Albert Hijn");
+        values.put(CompanyProvider.KEY_WEBSITE, "http://google.com");
+
+        Uri uri = getContentResolver().insert(
+                CompanyProvider.CONTENT_URI, values);
+    }
+
+    private void addOffice() {
+        ContentValues values = new ContentValues();
+        values.put(OfficeProvider.KEY_OFFICE_ID, 1);
+        values.put(OfficeProvider.KEY_ADDRESS, "Test");
+        values.put(OfficeProvider.KEY_PHONE_NUMBER, 1234);
+        values.put(OfficeProvider.KEY_OFFICE_TYPE, "XL");
+
+        Uri uri = getContentResolver().insert(
+                OfficeProvider.CONTENT_URI, values);
+    }
+
+    private void updateCompany(String id) {
+        ContentValues editedValues = new ContentValues();
+        editedValues.put(CompanyProvider.KEY_NAME, "This was updated!");
+        getContentResolver().update(Uri.parse("content://pidal.alfonso.w4group1provider.CompanyProvider/companies/" + id),
+                editedValues,
+                null,
+                null);
+    }
+
+    private void updateOffice(String id) {
+        ContentValues editedValues = new ContentValues();
+        editedValues.put(OfficeProvider.KEY_ADDRESS, "This was also updated!");
+        getContentResolver().update(Uri.parse("content://pidal.alfonso.w4group1provider.OfficeProvider/offices" + id),
+                editedValues,
+                null,
+                null);
+    }
+
+    private void deleteCompany(String id) {
+        getContentResolver().delete(Uri.parse("content://pidal.alfonso.w4group1provider.CompanyProvider/companies/" + id),
+                null, null);
+
+    }
+
+    private void deleteOffice(String id) {
+        getContentResolver().delete(Uri.parse("content://pidal.alfonso.w4group1provider.OfficeProvider/offices/" + id),
+                null, null);
+
+    }
+
+    private void getAllCompanies() {
+        Uri allCompanies = Uri.parse("content://pidal.alfonso.w4group1provider.CompanyProvider/companies/");
+
+        Cursor c;
+
+        if (android.os.Build.VERSION.SDK_INT < 11) {
+            c = managedQuery(allCompanies, null, null, null,
+                    "name desc");
+        } else {
+            CursorLoader cursorLoader = new CursorLoader(
+                    this,
+                    allCompanies, null, null, null,
+                    "name desc");
+            c = cursorLoader.loadInBackground();
         }
 
-        returnCompany.setName("This was changed!");
-        int updatedCompany = dbHelper.updateCompany(returnCompany);
-        Log.d("Updating company", dbHelper.getCompany(updatedCompany).toString());
 
-        Office returnOffice = dbHelper.getOffice(1);
-        Log.d("Reading office", returnOffice.toString());
+        if (c.moveToFirst()) {
+            do {
+                Toast.makeText(this,
+                        c.getString(c.getColumnIndex(
+                                CompanyProvider.KEY_COMPANY_ID)) + ", " +
+                                c.getString(c.getColumnIndex(
+                                        CompanyProvider.KEY_NAME)) + ", " +
+                                c.getString(c.getColumnIndex(
+                                        CompanyProvider.KEY_WEBSITE)),
+                        Toast.LENGTH_SHORT).show();
+            } while (c.moveToNext());
+        }
+    }
 
-        List<Office> officeList = dbHelper.getAllOffices();
+    private void getAllOffices() {
+        Uri allOffices = Uri.parse("content://pidal.alfonso.w4group1provider.OfficeProvider/offices/");
 
-        for (Office anOfficeList : officeList) {
-            Log.d("Reading all offices", anOfficeList.toString());
+        Cursor c;
+
+        if (android.os.Build.VERSION.SDK_INT < 11) {
+            c = managedQuery(allOffices, null, null, null,
+                    "address desc");
+        } else {
+            CursorLoader cursorLoader = new CursorLoader(
+                    this,
+                    allOffices, null, null, null,
+                    "address desc");
+            c = cursorLoader.loadInBackground();
         }
 
-        returnOffice.setAddress("This was changed!");
-        int updatedOffice = dbHelper.updateOffice(returnOffice);
-        Log.d("Updating office", dbHelper.getOffice(updatedOffice).toString());
 
-        //dbHelper.deleteOffice(returnOffice);
-        //Log.d("Deleting office", "deleted");
+        if (c.moveToFirst()) {
+            do {
+                Toast.makeText(this,
+                        c.getString(c.getColumnIndex(
+                                OfficeProvider.KEY_OFFICE_ID)) + ", " +
+                                c.getString(c.getColumnIndex(
+                                        OfficeProvider.KEY_ADDRESS)) + ", " +
+                                c.getString(c.getColumnIndex(
+                                        OfficeProvider.KEY_PHONE_NUMBER)) + ", " +
+                                c.getString(c.getColumnIndex(
+                                        OfficeProvider.KEY_OFFICE_TYPE)),
+                        Toast.LENGTH_SHORT).show();
+            } while (c.moveToNext());
+        }
+    }
 
-        Gallery returnGallery = dbHelper.getGallery(1);
-        Log.d("Reading gallery", returnGallery.toString());
+    private void getCompany(String id) {
+        Uri allCompanies = Uri.parse("content://pidal.alfonso.w4group1provider.CompanyProvider/companies/" + id);
 
-        List<Gallery> galleryList = dbHelper.getAllGalleries();
+        Cursor c;
 
-        for (Gallery aGalleryList : galleryList) {
-            Log.d("Reading all galleries", aGalleryList.toString());
+        if (android.os.Build.VERSION.SDK_INT < 11) {
+            c = managedQuery(allCompanies, null, null, null,
+                    "name desc");
+        } else {
+            CursorLoader cursorLoader = new CursorLoader(
+                    this,
+                    allCompanies, null, null, null,
+                    "name desc");
+            c = cursorLoader.loadInBackground();
         }
 
-        returnGallery.setURL("This was changed!");
-        int updatedGallery = dbHelper.updateGallery(returnGallery);
-        Log.d("Updating gallery", dbHelper.getGallery(updatedGallery).toString());
 
-        //dbHelper.deleteGallery(returnGallery);
-        //Log.d("Deleting gallery", "deleted");
+        if (c.moveToFirst()) {
+            do {
+                Toast.makeText(this,
+                        c.getString(c.getColumnIndex(
+                                CompanyProvider.KEY_COMPANY_ID)) + ", " +
+                                c.getString(c.getColumnIndex(
+                                        CompanyProvider.KEY_NAME)) + ", " +
+                                c.getString(c.getColumnIndex(
+                                        CompanyProvider.KEY_WEBSITE)),
+                        Toast.LENGTH_SHORT).show();
+            } while (c.moveToNext());
+        }
+    }
 
-        Language returnLanguage = dbHelper.getLanguage(1);
-        Log.d("Reading language", returnLanguage.toString());
+    private void getOffice(String id) {
+        Uri allOffices = Uri.parse("content://pidal.alfonso.w4group1provider.OfficeProvider/offices/" + id);
 
-        List<Language> languageList = dbHelper.getAllLanguages();
+        Cursor c;
 
-        for (Language aLanguageList : languageList)
-            Log.d("Reading all languages", aLanguageList.toString());
+        if (android.os.Build.VERSION.SDK_INT < 11) {
+            c = managedQuery(allOffices, null, null, null,
+                    "address desc");
+        } else {
+            CursorLoader cursorLoader = new CursorLoader(
+                    this,
+                    allOffices, null, null, null,
+                    "address desc");
+            c = cursorLoader.loadInBackground();
+        }
 
-        returnLanguage.setDescription("This was changed!");
-        int updatedLanguage = dbHelper.updateLanguage(returnLanguage);
-        Log.d("Updating language", dbHelper.getLanguage(updatedLanguage).toString());
 
-        //dbHelper.deleteLanguage(returnLanguage);
-        //Log.d("Deleting language", "deleted");
-
-        //dbHelper.deleteCompany(returnCompany);
-        //Log.d("Deleting company", "deleted");
+        if (c.moveToFirst()) {
+            do {
+                Toast.makeText(this,
+                        c.getString(c.getColumnIndex(
+                                OfficeProvider.KEY_OFFICE_ID)) + ", " +
+                                c.getString(c.getColumnIndex(
+                                        OfficeProvider.KEY_PHONE_NUMBER)) + ", " +
+                                c.getString(c.getColumnIndex(
+                                        OfficeProvider.KEY_ADDRESS)) + ", " +
+                                c.getString(c.getColumnIndex(
+                                        OfficeProvider.KEY_OFFICE_TYPE)),
+                        Toast.LENGTH_SHORT).show();
+            } while (c.moveToNext());
+        }
     }
 
     @Override
