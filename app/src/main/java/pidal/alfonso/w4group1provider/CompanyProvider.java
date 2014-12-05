@@ -18,10 +18,6 @@ import android.text.TextUtils;
  */
 public class CompanyProvider extends ContentProvider {
 
-    static final String PROVIDER_NAME = "pidal.alfonso.w4group1provider.CompanyProvider";
-
-    public static Uri CONTENT_URI = Uri.parse("content://" + PROVIDER_NAME + "/companies");
-
     static final int COMPANIES = 1;
     static final int COMPANY_ID = 2;
 
@@ -29,45 +25,12 @@ public class CompanyProvider extends ContentProvider {
 
     static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        uriMatcher.addURI(PROVIDER_NAME, "companies", COMPANIES);
-        uriMatcher.addURI(PROVIDER_NAME, "companies/#", COMPANY_ID);
+        uriMatcher.addURI(Provider.CompanyColumns.PROVIDER_NAME, "companies", COMPANIES);
+        uriMatcher.addURI(Provider.CompanyColumns.PROVIDER_NAME, "companies/#", COMPANY_ID);
     }
 
-    public static final String TABLE_COMPANY_NAME = "companies";
-
-    // Column names for company table.
-    public static final String KEY_COMPANY_ID = "company_id";
-    public static final String KEY_NAME = "name";
-    public static final String KEY_WEBSITE = "website";
 
     private SQLiteDatabase db;
-
-    static final String DATABASE_NAME = "Companies";
-    static final int DATABASE_VERSION = 1;
-
-    private static class DatabaseHelper extends SQLiteOpenHelper {
-
-        public DatabaseHelper(Context context) {
-            super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        }
-
-        @Override
-        public void onCreate(SQLiteDatabase db) {
-            String CREATE_COMPANY_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_COMPANY_NAME + "("
-                    + KEY_COMPANY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_NAME + " TEXT,"
-                    + KEY_WEBSITE + " TEXT" + ");";
-
-            db.execSQL(CREATE_COMPANY_TABLE);
-        }
-
-        @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMPANY_NAME + ";");
-
-            onCreate(db);
-        }
-
-    }
 
     @Override
     public boolean onCreate() {
@@ -80,7 +43,7 @@ public class CompanyProvider extends ContentProvider {
     @Override
     public Uri insert(Uri uri, ContentValues values) {
 
-        long rowID = db.insert(TABLE_COMPANY_NAME, null, values);
+        long rowID = db.insert(Provider.CompanyColumns.TABLE_NAME, null, values);
 
         if (rowID > 0) {
             Uri _uri = ContentUris.withAppendedId(uri, rowID);
@@ -95,14 +58,14 @@ public class CompanyProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-        queryBuilder.setTables(TABLE_COMPANY_NAME);
+        queryBuilder.setTables(Provider.CompanyColumns.TABLE_NAME);
 
         if (uriMatcher.match(uri) == COMPANY_ID) {
-            queryBuilder.appendWhere(KEY_COMPANY_ID + " = " + uri.getPathSegments().get(1));
+            queryBuilder.appendWhere(Provider.CompanyColumns.KEY_COMPANY_ID + " = " + uri.getPathSegments().get(1));
         }
 
         if (sortOrder == null || sortOrder == "") {
-            sortOrder = KEY_NAME;
+            sortOrder = Provider.CompanyColumns.KEY_NAME;
         }
 
         Cursor c = queryBuilder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
@@ -129,11 +92,11 @@ public class CompanyProvider extends ContentProvider {
         int count = 0;
         switch (uriMatcher.match(uri)) {
             case COMPANIES:
-                count = db.update(TABLE_COMPANY_NAME, values, selection, selectionArgs);
+                count = db.update(Provider.CompanyColumns.TABLE_NAME, values, selection, selectionArgs);
                 break;
             case COMPANY_ID:
-                count = db.update(TABLE_COMPANY_NAME, values,
-                        KEY_COMPANY_ID + " = " + uri.getPathSegments().get(1) +
+                count = db.update(Provider.CompanyColumns.TABLE_NAME, values,
+                        Provider.CompanyColumns.KEY_COMPANY_ID + " = " + uri.getPathSegments().get(1) +
                                 (!TextUtils.isEmpty(selection) ? " AND (" +
                                         selection + ")" : ""),
                         selectionArgs);
@@ -150,11 +113,11 @@ public class CompanyProvider extends ContentProvider {
         int count = 0;
         switch (uriMatcher.match(uri)) {
             case COMPANIES:
-                count = db.delete(TABLE_COMPANY_NAME, selection, selectionArgs);
+                count = db.delete(Provider.CompanyColumns.TABLE_NAME, selection, selectionArgs);
                 break;
             case COMPANY_ID:
-                count = db.delete(TABLE_COMPANY_NAME,
-                        KEY_COMPANY_ID + " = " + uri.getPathSegments().get(1) +
+                count = db.delete(Provider.CompanyColumns.TABLE_NAME,
+                        Provider.CompanyColumns.KEY_COMPANY_ID + " = " + uri.getPathSegments().get(1) +
                                 (!TextUtils.isEmpty(selection) ? " AND (" +
                                         selection + ")" : ""),
                         selectionArgs);
@@ -166,6 +129,4 @@ public class CompanyProvider extends ContentProvider {
         return count;
 
     }
-
-
 }
