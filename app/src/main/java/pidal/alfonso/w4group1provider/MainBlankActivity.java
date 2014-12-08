@@ -21,7 +21,9 @@ public class MainBlankActivity extends Activity {
 
         this.addCompany();
         this.getCompany("1");
+
         this.updateCompany("1");
+
         this.getCompany("1");
 
         this.getAllCompanies();
@@ -40,28 +42,28 @@ public class MainBlankActivity extends Activity {
 
     private void addCompany() {
         ContentValues values = new ContentValues();
-        values.put(CompanyProvider.KEY_COMPANY_ID, 1);
-        values.put(CompanyProvider.KEY_NAME, "Albert Hijn");
-        values.put(CompanyProvider.KEY_WEBSITE, "http://google.com");
+        values.put(Provider.CompanyColumns.KEY_COMPANY_ID, 1);
+        values.put(Provider.CompanyColumns.KEY_NAME, "Albert Hijn");
+        values.put(Provider.CompanyColumns.KEY_WEBSITE, "http://google.com");
 
         Uri uri = getContentResolver().insert(
-                CompanyProvider.CONTENT_URI, values);
+                Provider.CompanyColumns.CONTENT_URI, values);
     }
 
     private void addOffice() {
         ContentValues values = new ContentValues();
-        values.put(OfficeProvider.KEY_OFFICE_ID, 1);
-        values.put(OfficeProvider.KEY_ADDRESS, "Test");
-        values.put(OfficeProvider.KEY_PHONE_NUMBER, 1234);
-        values.put(OfficeProvider.KEY_OFFICE_TYPE, "XL");
+        values.put(Provider.OfficeColumns.KEY_OFFICE_ID, 1);
+        values.put(Provider.OfficeColumns.KEY_ADDRESS, "Test");
+        values.put(Provider.OfficeColumns.KEY_PHONE_NUMBER, 1234);
+        values.put(Provider.OfficeColumns.KEY_OFFICE_TYPE, "XL");
 
         Uri uri = getContentResolver().insert(
-                OfficeProvider.CONTENT_URI, values);
+                Provider.OfficeColumns.CONTENT_URI, values);
     }
 
     private void updateCompany(String id) {
         ContentValues editedValues = new ContentValues();
-        editedValues.put(CompanyProvider.KEY_NAME, "This was updated!");
+        editedValues.put(Provider.CompanyColumns.KEY_NAME, "This was updated!");
         getContentResolver().update(Uri.parse("content://pidal.alfonso.w4group1provider.CompanyProvider/companies/" + id),
                 editedValues,
                 null,
@@ -70,8 +72,8 @@ public class MainBlankActivity extends Activity {
 
     private void updateOffice(String id) {
         ContentValues editedValues = new ContentValues();
-        editedValues.put(OfficeProvider.KEY_ADDRESS, "This was also updated!");
-        getContentResolver().update(Uri.parse("content://pidal.alfonso.w4group1provider.OfficeProvider/offices" + id),
+        editedValues.put(Provider.OfficeColumns.KEY_ADDRESS, "This was also updated!");
+        getContentResolver().update(Uri.parse("content://pidal.alfonso.w4group1provider.OfficeProvider/offices/" + id),
                 editedValues,
                 null,
                 null);
@@ -110,11 +112,11 @@ public class MainBlankActivity extends Activity {
             do {
                 Toast.makeText(this,
                         c.getString(c.getColumnIndex(
-                                CompanyProvider.KEY_COMPANY_ID)) + ", " +
+                                Provider.CompanyColumns.KEY_COMPANY_ID)) + ", " +
                                 c.getString(c.getColumnIndex(
-                                        CompanyProvider.KEY_NAME)) + ", " +
+                                        Provider.CompanyColumns.KEY_NAME)) + ", " +
                                 c.getString(c.getColumnIndex(
-                                        CompanyProvider.KEY_WEBSITE)),
+                                        Provider.CompanyColumns.KEY_WEBSITE)),
                         Toast.LENGTH_SHORT).show();
             } while (c.moveToNext());
         }
@@ -141,13 +143,13 @@ public class MainBlankActivity extends Activity {
             do {
                 Toast.makeText(this,
                         c.getString(c.getColumnIndex(
-                                OfficeProvider.KEY_OFFICE_ID)) + ", " +
+                                Provider.OfficeColumns.KEY_OFFICE_ID)) + ", " +
                                 c.getString(c.getColumnIndex(
-                                        OfficeProvider.KEY_ADDRESS)) + ", " +
+                                        Provider.OfficeColumns.KEY_ADDRESS)) + ", " +
                                 c.getString(c.getColumnIndex(
-                                        OfficeProvider.KEY_PHONE_NUMBER)) + ", " +
+                                        Provider.OfficeColumns.KEY_PHONE_NUMBER)) + ", " +
                                 c.getString(c.getColumnIndex(
-                                        OfficeProvider.KEY_OFFICE_TYPE)),
+                                        Provider.OfficeColumns.KEY_OFFICE_TYPE)),
                         Toast.LENGTH_SHORT).show();
             } while (c.moveToNext());
         }
@@ -174,11 +176,11 @@ public class MainBlankActivity extends Activity {
             do {
                 Toast.makeText(this,
                         c.getString(c.getColumnIndex(
-                                CompanyProvider.KEY_COMPANY_ID)) + ", " +
+                                Provider.CompanyColumns.KEY_COMPANY_ID)) + ", " +
                                 c.getString(c.getColumnIndex(
-                                        CompanyProvider.KEY_NAME)) + ", " +
+                                        Provider.CompanyColumns.KEY_NAME)) + ", " +
                                 c.getString(c.getColumnIndex(
-                                        CompanyProvider.KEY_WEBSITE)),
+                                        Provider.CompanyColumns.KEY_WEBSITE)),
                         Toast.LENGTH_SHORT).show();
             } while (c.moveToNext());
         }
@@ -205,13 +207,13 @@ public class MainBlankActivity extends Activity {
             do {
                 Toast.makeText(this,
                         c.getString(c.getColumnIndex(
-                                OfficeProvider.KEY_OFFICE_ID)) + ", " +
+                                Provider.OfficeColumns.KEY_OFFICE_ID)) + ", " +
                                 c.getString(c.getColumnIndex(
-                                        OfficeProvider.KEY_PHONE_NUMBER)) + ", " +
+                                        Provider.OfficeColumns.KEY_PHONE_NUMBER)) + ", " +
                                 c.getString(c.getColumnIndex(
-                                        OfficeProvider.KEY_ADDRESS)) + ", " +
+                                        Provider.OfficeColumns.KEY_ADDRESS)) + ", " +
                                 c.getString(c.getColumnIndex(
-                                        OfficeProvider.KEY_OFFICE_TYPE)),
+                                        Provider.OfficeColumns.KEY_OFFICE_TYPE)),
                         Toast.LENGTH_SHORT).show();
             } while (c.moveToNext());
         }
