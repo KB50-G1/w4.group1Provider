@@ -1,14 +1,9 @@
 package pidal.alfonso.w4group1provider;
 
 import android.app.Activity;
-import android.content.ContentValues;
-import android.content.CursorLoader;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 
 public class MainBlankActivity extends Activity {
@@ -17,6 +12,8 @@ public class MainBlankActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_blank);
+<<<<<<< HEAD
+=======
 
 
         this.addCompany();
@@ -217,6 +214,7 @@ public class MainBlankActivity extends Activity {
                         Toast.LENGTH_SHORT).show();
             } while (c.moveToNext());
         }
+>>>>>>> origin/feature_sqlite
     }
 
     @Override
