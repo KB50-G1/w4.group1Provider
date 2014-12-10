@@ -1,25 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="pidal.alfonso.w4group1provider">
+<manifest
+    package="pidal.alfonso.w4group1provider"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@android:style/Theme.Holo.NoActionBar">
+
         <provider
             android:name=".GroupOneProvider"
             android:authorities="pidal.alfonso.w4group1provider.GroupOneProvider"
             android:enabled="true"
-            android:exported="true"></provider>
+            android:exported="true"/>
 
         <activity
             android:name="pidal.alfonso.w4group1provider.MainBlankActivity"
             android:label="@string/title_activity_main_blank">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
     </application>

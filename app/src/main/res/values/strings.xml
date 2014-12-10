@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">w4.group1Provider</string>
+    <string name="app_name">AH Content Provider</string>
     <string name="title_activity_main_blank">MainBlankActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>

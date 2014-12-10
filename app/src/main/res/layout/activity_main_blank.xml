@@ -6,11 +6,17 @@
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:paddingBottom="@dimen/activity_vertical_margin"
-                tools:context="pidal.alfonso.w4group1provider.MainBlankActivity">
+                tools:context="pidal.alfonso.w4group1provider.MainBlankActivity"
+                android:background="#009DDC"
+    >
 
     <TextView
-        android:text="@string/hello_world"
+        android:text="@string/app_name"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:textSize="40dp"
+        android:textColor="#FFFFFF"/>
 
 </RelativeLayout>
