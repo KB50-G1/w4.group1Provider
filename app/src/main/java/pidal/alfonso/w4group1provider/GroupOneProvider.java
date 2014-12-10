@@ -110,10 +110,16 @@ public class GroupOneProvider extends ContentProvider {
                     + KEY_LANGUAGE + " TEXT," + KEY_COMPANY_ID + " INTEGER, FOREIGN KEY(" + KEY_COMPANY_ID + ") REFERENCES "
                     + TABLE_COMPANY_NAME + "(" + KEY_COMPANY_ID + "));";
 
+            String CREATE_COMPANY = "INSERT INTO " + TABLE_COMPANY_NAME + "("
+                    + KEY_COMPANY_ID + ", " + KEY_NAME + ", " + KEY_WEBSITE + ") "
+                    + "VALUES(1, 'Albert Heijn', 'https://www.ah.nl');";
+
+
             db.execSQL(CREATE_COMPANY_TABLE);
             db.execSQL(CREATE_OFFICE_TABLE);
             db.execSQL(CREATE_GALLERY_TABLE);
             db.execSQL(CREATE_LANGUAGE_TABLE);
+            db.execSQL(CREATE_COMPANY);
         }
 
         @Override
